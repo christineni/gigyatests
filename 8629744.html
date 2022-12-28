@@ -1,0 +1,110 @@
+<html>
+
+<head>
+    <title>Christine's Demo - EU</title>
+    <script type="text/javascript">
+        function GigyaLoadFunctions() {
+            gigya.accounts.addEventHandlers({
+                onLogin: onLoginHandler
+            });
+            gigya.accounts.getAccountInfo({
+                "include": "identities-active, identities-all, identities-global, loginIDs, emails,  profile, data, regSource, irank, isLockedOut, lastLoginLocation, rba, subscriptions, userInfo, preferences, groups, id_token",
+                "extraProfileFields": "languages, address, phones, education, educationLevel, honors, publications, patents, certifications, likes, professionalHeadline, bio, industry, specialities, work, skills, religion, politicalView, interestedIn, relationshipStatus, hometown, favorites, followersCount, followingCount, username, name, locale, verified, timezone, samlData",
+                callback: displayUserInfo
+            })
+        }
+
+        function loadScreenSet(screens) {
+            var params;
+
+            switch (screens) {
+                case 'login':
+                    params = {
+                        screenSet: "Default-RegistrationLogin"
+                    }
+                    break;
+                case 'register':
+                    params = {
+                        screenSet: "Default-RegistrationLogin",
+                        startScreen: "gigya-register-screen"
+                    }
+                    break;
+                case 'passwordless':
+                    params = {
+                        screenSet: "Default-PasswordlessLogin"
+                    }
+                    break;
+                case 'litereg':
+                    params = {
+                        screenSet: "Default-LiteRegistration"
+                    }
+                    break;
+                default:
+                    params = {
+                        screenSet: "Default-ProfileUpdate"
+                    }
+                    break;
+            }
+            gigya.accounts.showScreenSet(params);
+        }
+
+        function onLoginHandler(resp) {
+            console.log("onLogin resp.context",resp.context);
+            gigya.accounts.getAccountInfo({
+                "include": "identities-active, identities-all, identities-global, loginIDs, emails,  profile, data, regSource, irank, isLockedOut, lastLoginLocation, rba, subscriptions, userInfo, preferences, groups, id_token",
+                "extraProfileFields": "languages, address, phones, education, educationLevel, honors, publications, patents, certifications, likes, professionalHeadline, bio, industry, specialities, work, skills, religion, politicalView, interestedIn, relationshipStatus, hometown, favorites, followersCount, followingCount, username, name, locale, verified, timezone, samlData",
+                callback: displayUserInfo
+            })
+        }
+
+        function displayUserInfo(resp) {
+            document.getElementById('resp').innerHTML = JSON.stringify(resp, undefined, 42);
+            // if (resp.errorCode === 0) {
+            //     console.log("displayUserInfo function - if", resp);
+            //     document.getElementById('resp').innerHTML = JSON.stringify(resp, undefined, 42);
+            // }
+            // else {
+            //     console.log("displayUserInfo function - else", resp);
+            // }
+        }
+
+        function onLogoutHandler(res) {
+            console.log(res);
+            document.getElementById('resp').innerHTML = JSON.stringify(res, undefined, 42);
+        }
+
+        function logout() {
+            gigya.accounts.logout({
+                context: "raas-eu.html",
+                callback: onLogoutHandler
+            });
+        }
+
+        var onGigyaServiceReady = function () {
+            GigyaLoadFunctions();
+        }
+    </script>
+    <script type="text/javascript"
+        src="https://cdns.gigya.com/js/gigya.js?apikey=3_p5q_VcBj56dV7STqt7MnXU70YPQr1Fcbi9MDyR4OE5RoPdsEmsy0E_SbW7p2hbf7">
+        </script>
+
+</head>
+
+<body>
+    <div>
+
+        <a href="#" onclick="javascript:loadScreenSet('login');">Login</a><br />
+        <a href="#" onclick="javascript:socializeLogin();">Socialize - Add Connection</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('register');">Register</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('passwordless');">Passwordless</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('litereg');">Lite Registration</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('update');">Update Profile</a><br />
+        <a href="#" onclick="javascript:logout();">Logout</a><br />
+
+        <div style="width: 100%;">
+            <pre id="resp"></pre><br />
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+<html>
+
+<head>
+    <title>Christine's Demo - US</title>
+    <script type="text/javascript">
+        function GigyaLoadFunctions() {
+            // gigya.socialize.addEventHandlers({
+            //     onLogin: onSocializeLoginHandler,
+            //     onConnectionAdded: onSocializeLoginHandler,
+            //     onConnectionRemoved: onSocializeLoginHandler
+            // });
+            gigya.accounts.addEventHandlers({
+                onLogin: onLoginHandler
+            });
+            gigya.accounts.getAccountInfo({
+                "include": "identities-active, identities-all, identities-global, loginIDs, emails,  profile, data, regSource, irank, isLockedOut, lastLoginLocation, rba, subscriptions, userInfo, preferences, groups, id_token",
+                "extraProfileFields": "languages, address, phones, education, educationLevel, honors, publications, patents, certifications, likes, professionalHeadline, bio, industry, specialities, work, skills, religion, politicalView, interestedIn, relationshipStatus, hometown, favorites, followersCount, followingCount, username, name, locale, verified, timezone, samlData",
+                callback: displayUserInfo
+            })
+        }
+
+        function loadScreenSet(screens) {
+            var params;
+            // var customLangParams = {
+            //     this_field_is_required: '%fieldname'
+            // };
+
+            switch (screens) {
+                case 'login':
+                    params = {
+                        screenSet: "CN-RegistrationLogin",
+                        authFlow: "redirect"
+                        // containerID: "login-div",
+                        // redirectURL: "https://christine.gigya-cs.com/repo/raas.html",
+                        // redirectMethod: "post"
+                        // screenSet: "Default-RegistrationLogin"
+                    }
+                    break;
+                case 'register':
+                    params = {
+                        screenSet: "CN-RegistrationLogin",
+                        startScreen: "gigya-register-screen"
+                        // customLang: customLangParams
+                    }
+                    break;
+                case 'passwordless':
+                    params = {
+                        screenSet: "Default-PasswordlessLogin",
+                        // authFlow: "redirect"
+                        // redirectURL: "https://christine.gigya-cs.com/repo/raas.html"
+                    }
+                    break;
+                case 'litereg':
+                    params = {
+                        screenSet: "CN-LiteRegistration",
+                    }
+                    break;
+                default:
+                    params = {
+                        screenSet: "CN-ProfileUpdate"
+                    }
+                    break;
+            }
+            gigya.accounts.showScreenSet(params);
+        }
+
+        function socializeLogin() {
+            // var params = {
+            //     provider: "facebook",
+            //     authFlow: "redirect",
+            //     redirectURL: "https://christine.gigya-cs.com/repo/raas.html",
+            //     redirectMethod: "post"
+            // };
+
+            // gigya.socialize.login(params);
+            // var params = {
+            //     containerID: "addCon",
+            //     enabledProviders: "facebook, google, twitter"
+            // }
+            gigya.socialize.addConnection({ "provider": "googleplus" });
+        }
+
+        function onLoginHandler(resp) {
+            console.log("onLogin resp.context", resp.context);
+            gigya.accounts.getAccountInfo({
+                "include": "identities-active, identities-all, identities-global, loginIDs, emails,  profile, data, regSource, irank, isLockedOut, lastLoginLocation, rba, subscriptions, userInfo, preferences, groups, id_token",
+                "extraProfileFields": "languages, address, phones, education, educationLevel, honors, publications, patents, certifications, likes, professionalHeadline, bio, industry, specialities, work, skills, religion, politicalView, interestedIn, relationshipStatus, hometown, favorites, followersCount, followingCount, username, name, locale, verified, timezone, samlData",
+                callback: displayUserInfo
+            })
+        }
+
+        // function onSocializeLoginHandler(resp) {
+        //     console.log("socialize handler", resp);
+        // }
+
+        function displayUserInfo(resp) {
+            // document.getElementById('resp').innerHTML = JSON.stringify(resp, undefined, 42);
+            if (resp.errorCode === 0) {
+                console.log("displayUserInfo function - if", resp);
+                document.getElementById('resp').innerHTML = JSON.stringify(resp, undefined, 42);
+            }
+            else {
+                console.log("displayUserInfo function - else", resp);
+                document.getElementById('resp').innerHTML = JSON.stringify(resp, undefined, 42);
+            }
+        }
+
+        function onLogoutHandler(res) {
+            console.log(res);
+            document.getElementById('resp').innerHTML = JSON.stringify(res, undefined, 42);
+        }
+
+        function logout() {
+            gigya.accounts.logout({
+                context: "raas.html",
+                callback: onLogoutHandler
+            });
+        }
+
+        var onGigyaServiceReady = function () {
+            GigyaLoadFunctions();
+        }
+    </script>
+    <script type="text/javascript"
+        src="https://cdns.gigya.com/js/gigya.js?apikey=3_Yqu6-VlWWc54ywCh_IuYeDMBBmgKfirVEOijYA-D1q3LD8Tlde6-xuxfLzs8VcCq&lang=en-us">
+    </script>
+    <!-- <script type="text/javascript"
+        src="http://cdn.gigya.com/js/gigya.js?apikey=3_4pGElLzLiup0iQbKyBeWu_jitg5wOnaIOuU9HCsPyG2792jv0Zb6t6Z--aqMCC0J">
+    </script> -->
+
+    <!-- <script type="text/javascript"
+        src="https://cdns.us1-st1.gigya.com/js/gigya.js?apikey=3_Yqu6-VlWWc54ywCh_IuYeDMBBmgKfirVEOijYA-D1q3LD8Tlde6-xuxfLzs8VcCq&lang=en">
+    </script> -->
+
+</head>
+
+<body>
+    <div>
+        <!-- <div id="addCon"></div> -->
+        <!-- <div id="login-div"></div> -->
+        <!-- <script>
+            gigya.accounts.showScreenSet({
+                screenSet: "CN-RegistrationLogin",
+                containerID: "login-div",
+                startScreen: "gigya-register-screen",
+                authFlow: "redirect",
+                enabledProviders: "google,facebook"
+            });
+
+            gigya.accounts.addEventHandlers({
+                onLogin: onLoginHandler
+            });
+
+            function onLoginHandler(res) {
+                alert("Logged in!");
+            }
+        </script> -->
+        <!-- <div id="lite"></div>
+        <script>
+            gigya.accounts.showScreenSet({
+                screenSet: "Default-LiteRegistration",
+                containerID: "lite"
+            });
+        </script> -->
+
+        <a href="#" onclick="javascript:loadScreenSet('login');">Login</a><br />
+        <a href="#" onclick="javascript:socializeLogin();">Socialize - Add Connection</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('register');">Register</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('passwordless');">Passwordless</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('litereg');">Lite Registration</a><br />
+        <a href="#" onclick="javascript:loadScreenSet('update');">Update Profile</a><br />
+        <a href="#" onclick="javascript:logout();">Logout</a><br />
+
+        <div style="width: 100%;">
+            <pre id="resp"></pre><br />
+        </div>
+    </div>
+</body>
+
+</html>
